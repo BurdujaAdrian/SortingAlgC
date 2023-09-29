@@ -1,0 +1,219 @@
+#include <iostream>
+#include <chrono>
+using namespace std;
+using namespace std::chrono;
+
+int part(int elements[], int low, int high)
+{int j;
+    int pivot = elements[high];
+    int i = low-1;
+    for( j = low; j< high; j++)
+    {
+        if (elements[j]<=pivot)
+        {
+            i++;
+            swap(elements[i], elements[j]);
+        }
+    }
+    swap(elements[i+1], elements[j]);
+    return i+1;
+}
+
+void quicksort(int elements[], int low, int high)
+{ int pivot;
+    if (low<high)
+    {
+    pivot = part(elements, low, high);
+    quicksort(elements, low, pivot - 1);
+    quicksort(elements, pivot+1, high);
+    }
+}
+
+int main() {
+int elements[500000], temp, mnm,as=500000,j,fst,lst,i; bool r; //the values are a demo
+//delete all the comment markers to enable display of the unsorted and sorted arrays
+cout<<"\n unsorted array1: \n\n ";
+for (int i = 0; i < as; i++)
+{
+    elements[i] = rand() % as;
+    //cout << elements[i] << " ";
+}
+cout<<"\n\n bubble \n\n";
+
+auto start1 = high_resolution_clock::now();
+
+for (int i = 0; i < as; i++)
+{
+    for (int j = 0; j < (as - i - 1); j++)
+    {
+        if (elements[j] > elements[j + 1])
+        {
+            temp = elements[j];
+            elements[j] = elements[j + 1];
+            elements[j + 1] = temp;
+        }
+    }
+}
+
+auto stop1 = high_resolution_clock::now();
+/*
+for (int i = 0; i < as; i++)
+{
+    cout << elements[i] << " ";
+}
+*/
+auto duration1 = duration_cast<microseconds>(stop1 - start1);
+cout << "\n sorted in= " << duration1.count();
+
+auto start2 = high_resolution_clock::now();
+
+cout << "\n \n unsorted array2: \n \n";
+for (int i = 0; i < as; i++)
+{
+    elements[i] = rand() % as;
+    //cout << elements[i] << " ";
+}
+cout << "\n\n selection: \n\n";
+for (int i = 0; i < as; i++)
+{
+    mnm = i;
+    for (int j = i + 1; j < as; j++)
+    {
+        if (elements[j] < elements[mnm])
+        {
+            mnm = j;
+        }
+    }
+    if (mnm != i)
+    {
+        temp = elements[mnm];
+        elements[mnm] = elements[i];
+        elements[i] = temp;
+    }
+}
+
+auto stop2 = high_resolution_clock::now();
+/*
+for (int i = 0; i < as; i++)
+{
+    cout << elements[i] << " ";
+}
+*/
+auto duration2 = duration_cast<microseconds>(stop2 - start2);
+cout << "\n sorted in= " << duration2.count();
+
+cout<<"\n\n unsorted array3: \n \n";
+for (int i = 0; i < as; i++)
+{
+    elements[i] = rand() % as;
+    //cout << elements[i] << " ";
+}
+cout <<"\n\n insertion: \n\n";
+
+auto start3 = high_resolution_clock::now();
+
+j=0;
+for(int i=1; i<as;i++)
+{
+    temp=elements[i];
+    j=i-1;
+    while(j>=0 && elements[j]>temp)
+    {
+        elements[j+1]=elements[j];
+        j=j-1;
+    }
+    elements[j+1]=temp;
+}
+auto stop3 = high_resolution_clock::now();
+/*
+for (int i = 0; i < as; i++)
+{
+    cout << elements[i] << " ";
+}
+*/
+auto duration3 = duration_cast<microseconds>(stop3 - start3);
+cout << "\n sorted in= " << duration3.count();
+
+cout<<"\n \n unsorted array4: \n\n";
+for (int i = 0; i < as; i++)
+{
+    elements[i] = rand() % as;
+    //cout << elements[i] << " ";
+}
+
+cout<<"\n\n quick sort \n\n";
+
+auto start4 = high_resolution_clock::now();
+
+quicksort(elements, 0, as -1);
+
+auto stop4 = high_resolution_clock::now();
+/*
+for (int i = 0; i < as; i++)
+{
+    cout << elements[i] << " ";
+}
+*/
+auto duration4 = duration_cast<microseconds>(stop4 - start4);
+cout <<"\n sorted in= "<<duration4.count();
+
+cout<<"\n\n unsorted array5: \n\n ";
+for (int i = 0; i < as; i++)
+{
+    elements[i] = rand() % as;
+    //cout << elements[i] << " ";
+}
+cout<<"\n\n cocktail \n";
+
+auto start5 = high_resolution_clock::now();
+
+fst=0;
+lst=as;
+r=true;
+
+while(r)
+{
+r=false;
+for(i = fst; i<=lst; i++)
+{
+    for (int j = 0; j < (lst - i - 1); j++)
+    {
+        if (elements[j] > elements[j + 1])
+        {
+            temp = elements[j];
+            elements[j] = elements[j + 1];
+            elements[j + 1] = temp;
+            r=true;
+        }
+    }
+    for (int j = lst - i - 1; j> 0 ; j--)
+    {
+       if (elements[j] > elements[j + 1])
+        {
+            temp = elements[j];
+            elements[j] = elements[j + 1];
+            elements[j + 1] = temp;
+            r=true;
+        }
+    }
+
+}
+if(!r)
+    break;
+
+
+}
+cout<<endl;
+auto stop5 = high_resolution_clock::now();
+/*
+for (int i = 0; i < as; i++)
+{
+    cout << elements[i] << " ";
+}
+*/
+auto duration5 = duration_cast<microseconds>(stop5 - start5);
+cout <<"\n sorted in= "<<duration5.count();
+
+
+return 0;
+}
